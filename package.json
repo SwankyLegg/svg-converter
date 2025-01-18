@@ -2,10 +2,13 @@
   "name": "svg-converter",
   "version": "1.0.0",
   "main": "index.js",
+  "homepage": "https://swankylegg.github.io/svg-converter",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next dev"
+    "start": "next start",
+    "export": "next export",
+    "lint": "next lint"
   },
   "keywords": [],
   "author": "",
