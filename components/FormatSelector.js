@@ -11,7 +11,7 @@ export default function FormatSelector({ selectedFormats, onFormatChange }) {
   };
 
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <div>
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',

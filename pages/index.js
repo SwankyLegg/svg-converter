@@ -1,5 +1,5 @@
 // pages/index.js
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import JSZip from 'jszip';
 import { analyzeSVG } from '../utils/svgAnalyzer';
 import { convertToPNG, convertToJPG } from '../utils/svgConverter';
@@ -8,6 +8,8 @@ import SizeSelector from '../components/SizeSelector';
 import FileUploader from '../components/FileUploader';
 import BrandDownload from '../components/BrandDownload';
 import FormatSelector from '../components/FormatSelector';
+import Section from '../components/Section';
+import { logEvent, EventTypes } from '../utils/logger';
 
 export default function Home() {
   const [files, setFiles] = useState([]);
@@ -22,6 +24,11 @@ export default function Home() {
   const [processingCount, setProcessingCount] = useState(0);
 
   const isProcessing = processingCount > 0;
+
+  useEffect(() => {
+    // Log page visit
+    logEvent(EventTypes.PAGE_VIEW);
+  }, []);
 
   const handleFileUpload = (event) => {
     const newFiles = Array.from(event.target.files).filter(file => file.type === 'image/svg+xml');
@@ -169,7 +176,13 @@ export default function Home() {
     });
   };
 
-  const downloadBrandZip = (brandName) => {
+  const downloadBrandZip = async (brandName) => {
+    // Log the download event with selected formats and sizes
+    await logEvent('download', {
+      formats: selectedFormats,
+      sizes: selectedSizes
+    });
+
     const brandZip = brandZips[brandName];
     if (!brandZip) return;
 
@@ -224,52 +237,56 @@ export default function Home() {
           lineHeight: 2,
           fontSize: '16px'
         }}>
-          <li>Choose your desired output formats and sizes</li>
+          <li>Choose your desired output sizes and formats</li>
           <li>Upload your SVG files</li>
           <li>Download organized ZIP files containing all your converted assets</li>
         </ol>
 
-        <h2 style={{
-          margin: '0',
-          fontSize: '20px',
-          fontWeight: '500'
-        }}>Sizes</h2>
+        <Section>
+          <h2 style={{
+            fontSize: '20px',
+            fontWeight: '500'
+          }}>Sizes</h2>
 
-        <SizeSelector
-          selectedSizes={selectedSizes}
-          setSelectedSizes={setSelectedSizes}
-          disabled={isProcessing}
-        />
-
-        <h2 style={{
-          margin: '0',
-          fontSize: '20px',
-          fontWeight: '500'
-        }}>Formats</h2>
-
-        <FormatSelector
-          selectedFormats={selectedFormats}
-          onFormatChange={setSelectedFormats}
-        />
-
-        <FileUploader
-          selectedSizes={selectedSizes}
-          onFileUpload={handleFileUpload}
-          files={files}
-          disabled={isProcessing}
-        />
-
-        {Object.entries(groupedFiles).map(([brandName, brandFiles]) => (
-          <BrandDownload
-            key={brandName}
-            brandName={brandName}
-            brandFiles={brandFiles}
-            isProcessing={isProcessing}
-            onDownload={downloadBrandZip}
-            numberOfSelectedCheckboxes={Object.values(selectedSizes).filter(Boolean).length}
-            numberOfFormats={Object.values(selectedFormats).filter(Boolean).length}
+          <SizeSelector
+            selectedSizes={selectedSizes}
+            setSelectedSizes={setSelectedSizes}
+            disabled={isProcessing}
           />
-        ))}
+        </Section>
+
+        <Section>
+          <h2 style={{
+            fontSize: '20px',
+            fontWeight: '500'
+          }}>Formats</h2>
+
+          <FormatSelector
+            selectedFormats={selectedFormats}
+            onFormatChange={setSelectedFormats}
+          />
+        </Section>
+
+        <Section>
+          <FileUploader
+            selectedSizes={selectedSizes}
+            onFileUpload={handleFileUpload}
+            files={files}
+            disabled={isProcessing}
+          />
+
+          {Object.entries(groupedFiles).map(([brandName, brandFiles]) => (
+            <BrandDownload
+              key={brandName}
+              brandName={brandName}
+              brandFiles={brandFiles}
+              isProcessing={isProcessing}
+              onDownload={downloadBrandZip}
+              numberOfSelectedCheckboxes={Object.values(selectedSizes).filter(Boolean).length}
+              numberOfFormats={Object.values(selectedFormats).filter(Boolean).length}
+            />
+          ))}
+        </Section>
       </div>
     </>
   );

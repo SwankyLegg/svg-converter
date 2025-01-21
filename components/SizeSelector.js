@@ -101,7 +101,7 @@ export default function SizeSelector({ selectedSizes, setSelectedSizes, disabled
     );
 
     return (
-      <Accordion title={titleContent}>
+      <Accordion key={title} title={titleContent}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',

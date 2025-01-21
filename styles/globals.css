@@ -150,4 +150,36 @@ textarea {
 /* Media elements */
 img {
   vertical-align: middle;
+}
+
+/* Section styling */
+.section {
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.section:first-child {
+  margin-top: 0;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h2 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Container for better spacing */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
 } 

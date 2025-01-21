@@ -2,6 +2,17 @@ export default function FileUploader({ selectedSizes, onFileUpload, files, disab
   const allSizesDisabled = Object.values(selectedSizes).every(v => !v);
   const isDisabled = disabled || allSizesDisabled;
 
+  const handleFileUpload = async (e) => {
+    // Log the upload event
+    await logEvent('file_upload', {
+      fileCount: e.target.files.length,
+      fileNames: Array.from(e.target.files).map(f => f.name)
+    });
+
+    // Call the original onFileUpload handler
+    onFileUpload(e);
+  };
+
   return (
     <div style={{ marginBottom: '20px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -16,12 +27,12 @@ export default function FileUploader({ selectedSizes, onFileUpload, files, disab
           fontSize: '16px',
           opacity: isDisabled ? 0.7 : 1
         }}>
-          Choose Files
+          Upload SVGs
           <input
             type="file"
             accept=".svg"
             multiple
-            onChange={onFileUpload}
+            onChange={handleFileUpload}
             disabled={isDisabled}
             style={{
               display: 'none'
