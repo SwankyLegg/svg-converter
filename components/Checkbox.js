@@ -1,4 +1,4 @@
-export default function Checkbox({ label, checked, onChange, disabled = false }) {
+export default function Checkbox({ label, checked, onChange, disabled = false, indeterminate = false }) {
   return (
     <label style={{
       display: 'flex',
@@ -12,6 +12,11 @@ export default function Checkbox({ label, checked, onChange, disabled = false })
         checked={checked}
         onChange={onChange}
         disabled={disabled}
+        ref={input => {
+          if (input) {
+            input.indeterminate = indeterminate;
+          }
+        }}
         style={{
           width: '18px',
           height: '18px',

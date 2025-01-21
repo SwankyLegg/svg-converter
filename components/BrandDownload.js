@@ -1,4 +1,6 @@
-export default function BrandDownload({ brandName, brandFiles, isProcessing, onDownload }) {
+export default function BrandDownload({ brandName, brandFiles, isProcessing, onDownload, numberOfSelectedCheckboxes, numberOfFormats }) {
+  const numberOfUploads = brandFiles.length;
+  const totalAssets = numberOfSelectedCheckboxes * numberOfFormats * numberOfUploads;
   return (
     <div style={{
       border: '1px solid #ccc',
@@ -9,7 +11,9 @@ export default function BrandDownload({ brandName, brandFiles, isProcessing, onD
       alignItems: 'center'
     }}>
       <h2 style={{ margin: 0 }}>
-        {brandName} ({brandFiles.length} asset{brandFiles.length !== 1 ? 's' : ''})
+        {brandName} ({totalAssets} download{totalAssets > 1 ? 's' :
+          ''} for {numberOfUploads} upload{numberOfUploads > 1 ? 's' :
+            ''})
       </h2>
       <label style={{
         padding: '12px 16px',

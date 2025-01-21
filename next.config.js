@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
-  basePath: '/svg-converter',
+  basePath: process.env.NODE_ENV === 'production' ? '/svg-converter' : '',
   images: {
     unoptimized: true,
   },

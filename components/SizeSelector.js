@@ -1,5 +1,6 @@
 import { webSizes, socialPlatforms } from '../utils/sizes';
 import Checkbox from './Checkbox';
+import Accordion from './Accordion';
 
 export default function SizeSelector({ selectedSizes, setSelectedSizes, disabled }) {
   const getCurrentPreset = () => {
@@ -49,42 +50,97 @@ export default function SizeSelector({ selectedSizes, setSelectedSizes, disabled
     });
   };
 
-  const renderSizeGroup = (title, sizes) => (
-    <div key={title} style={{ marginBottom: '24px' }}>
-      <h3 style={{
-        fontSize: '18px',
-        fontWeight: '500',
-        marginBottom: '16px',
-        color: '#333'
-      }}>{title}</h3>
+  const renderSizeGroup = (title, sizes) => {
+    const allChecked = sizes.every(size => selectedSizes[size.name]);
+    const someChecked = sizes.some(size => selectedSizes[size.name]);
+
+    const handleGroupCheckbox = (checked) => {
+      setSelectedSizes(prev => {
+        const newSizes = { ...prev };
+        sizes.forEach(size => {
+          newSizes[size.name] = checked;
+        });
+        return newSizes;
+      });
+    };
+
+    const titleContent = (
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: '16px'
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        flex: 1
       }}>
-        {sizes.map((size) => (
+        <div
+          onClick={(e) => {
+            // Prevent accordion toggle when clicking the checkbox area
+            e.preventDefault();
+            e.stopPropagation();
+            handleGroupCheckbox(!allChecked);
+          }}
+          style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
+        >
           <Checkbox
-            key={size.name}
-            label={
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <span style={{ fontWeight: 500 }}>{size.name}</span>
-                <span style={{ fontSize: '14px', color: '#666' }}>{size.width}x{size.height}</span>
-              </div>
-            }
-            checked={selectedSizes[size.name]}
-            onChange={(e) => setSelectedSizes(prev => ({
-              ...prev,
-              [size.name]: e.target.checked
-            }))}
+            checked={allChecked}
+            indeterminate={!allChecked && someChecked}
+            onChange={(e) => {
+              e.stopPropagation();
+              handleGroupCheckbox(e.target.checked);
+            }}
             disabled={disabled}
           />
-        ))}
+          <h3 style={{
+            fontSize: '18px',
+            fontWeight: '500',
+            color: '#333',
+            margin: 0,
+            cursor: 'pointer'
+          }}>{title}</h3>
+        </div>
       </div>
-    </div>
-  );
+    );
+
+    return (
+      <Accordion title={titleContent}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '16px',
+          paddingLeft: '32px'
+        }}>
+          {sizes.map((size) => (
+            <Checkbox
+              key={size.name}
+              label={
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <span style={{ fontWeight: 500 }}>{size.name}</span>
+                  <span style={{ fontSize: '14px', color: '#666' }}>{size.width}x{size.height}</span>
+                </div>
+              }
+              checked={selectedSizes[size.name]}
+              onChange={(e) => setSelectedSizes(prev => ({
+                ...prev,
+                [size.name]: e.target.checked
+              }))}
+              disabled={disabled}
+            />
+          ))}
+        </div>
+      </Accordion>
+    );
+  };
 
   return (
     <div>
+      <style global jsx>{`
+        .chevron {
+          transform: rotate(-90deg);
+          transition: transform 0.3s ease;
+        }
+        details[open] .chevron {
+          transform: rotate(0deg);
+        }
+      `}</style>
       <div style={{ marginBottom: '24px' }}>
         <select
           value={getCurrentPreset()}

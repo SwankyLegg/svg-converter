@@ -216,9 +216,18 @@ export default function Home() {
         <p style={{
           margin: '0',
           fontSize: '16px',
-          color: '#666',
+          color: '#222',
           lineHeight: '1.5'
-        }}>Convert your SVG brand assets into PNG and JPG formats at multiple sizes. Upload your SVG files, select your desired output formats and sizes, and download organized ZIP files containing all your converted assets.</p>
+        }}>Convert your SVG brand assets into PNG and JPG formats at multiple sizes. If you choose a favicon, you'll get a <code>favicon.ico</code> file as well. All conversion is done on your computer, so your files are never sent to a server.</p>
+        <ol style={{
+          color: '#222',
+          lineHeight: 2,
+          fontSize: '16px'
+        }}>
+          <li>Choose your desired output formats and sizes</li>
+          <li>Upload your SVG files</li>
+          <li>Download organized ZIP files containing all your converted assets</li>
+        </ol>
 
         <h2 style={{
           margin: '0',
@@ -257,6 +266,8 @@ export default function Home() {
             brandFiles={brandFiles}
             isProcessing={isProcessing}
             onDownload={downloadBrandZip}
+            numberOfSelectedCheckboxes={Object.values(selectedSizes).filter(Boolean).length}
+            numberOfFormats={Object.values(selectedFormats).filter(Boolean).length}
           />
         ))}
       </div>
