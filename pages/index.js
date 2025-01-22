@@ -231,7 +231,8 @@ export default function Home() {
           fontSize: '16px',
           color: '#222',
           lineHeight: '1.5'
-        }}>Convert your SVG brand assets into PNG and JPG formats at multiple sizes. If you choose a favicon, you'll get a <code>favicon.ico</code> file as well. All conversion is done on your computer, so your files are never sent to a server.</p>
+        }}>Convert your SVG brand assets into PNG and JPG formats at multiple sizes. If you choose a favicon, you'll get a <code>favicon.ico</code> file as well. All conversion is done on your computer, so your files are never sent to a server. You can view the code <a href="https://github.com/SwankyLegg/svg-converter">here</a>.
+        </p>
         <ol style={{
           color: '#222',
           lineHeight: 2,

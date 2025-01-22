@@ -60,12 +60,6 @@ body {
   width: 100%;
 }
 
-/* Default link styles */
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
 /* Make images easier to work with */
 img,
 picture,
@@ -134,7 +128,6 @@ ol {
 
 /* Link styling */
 a {
-  text-decoration: none;
   color: inherit;
 }
 
