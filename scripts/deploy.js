@@ -9,6 +9,36 @@ const runCommand = (command) => {
   }
 };
 
+const checkGitStatus = () => {
+  try {
+    // Check if git is installed
+    execSync('git --version', { stdio: 'ignore' });
+
+    // Check if user is authenticated with GitHub
+    try {
+      execSync('git remote get-url origin', { stdio: 'ignore' });
+    } catch (error) {
+      console.error('❌ Git remote is not configured. Please set up your Git remote first.');
+      process.exit(1);
+    }
+
+    // Check for uncommitted changes
+    const status = execSync('git status --porcelain').toString();
+    if (status) {
+      console.error('❌ You have uncommitted changes. Please commit or stash them before deploying.');
+      console.log('Uncommitted files:');
+      console.log(status);
+      process.exit(1);
+    }
+  } catch (error) {
+    console.error('❌ Git is not installed or there was an error checking git status.');
+    process.exit(1);
+  }
+};
+
+console.log('🔍 Checking Git status...');
+checkGitStatus();
+
 console.log('🚀 Starting deployment...');
 console.log('📦 Building the project...');
 runCommand('npm run build');

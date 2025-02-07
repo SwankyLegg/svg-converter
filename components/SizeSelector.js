@@ -71,24 +71,17 @@ export default function SizeSelector({ selectedSizes, setSelectedSizes, disabled
         gap: '12px',
         flex: 1
       }}>
-        <div
-          onClick={(e) => {
-            // Prevent accordion toggle when clicking the checkbox area
-            e.preventDefault();
-            e.stopPropagation();
-            handleGroupCheckbox(!allChecked);
-          }}
-          style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
-        >
-          <Checkbox
-            checked={allChecked}
-            indeterminate={!allChecked && someChecked}
-            onChange={(e) => {
-              e.stopPropagation();
-              handleGroupCheckbox(e.target.checked);
-            }}
-            disabled={disabled}
-          />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <Checkbox
+              checked={allChecked}
+              indeterminate={!allChecked && someChecked}
+              onChange={(e) => {
+                handleGroupCheckbox(e.target.checked);
+              }}
+              disabled={disabled}
+            />
+          </div>
           <h3 style={{
             fontSize: '18px',
             fontWeight: '500',
@@ -109,21 +102,23 @@ export default function SizeSelector({ selectedSizes, setSelectedSizes, disabled
           paddingLeft: '32px'
         }}>
           {sizes.map((size) => (
-            <Checkbox
-              key={size.name}
-              label={
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                  <span style={{ fontWeight: 500 }}>{size.name}</span>
-                  <span style={{ fontSize: '14px', color: '#666' }}>{size.width}x{size.height}</span>
-                </div>
-              }
-              checked={selectedSizes[size.name]}
-              onChange={(e) => setSelectedSizes(prev => ({
-                ...prev,
-                [size.name]: e.target.checked
-              }))}
-              disabled={disabled}
-            />
+            <div key={size.name} onClick={(evt) => evt.stopPropagation()}>
+              <Checkbox
+                key={size.name}
+                label={
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <span style={{ fontWeight: 500 }}>{size.name}</span>
+                    <span style={{ fontSize: '14px', color: '#666' }}>{size.width}x{size.height}</span>
+                  </div>
+                }
+                checked={selectedSizes[size.name]}
+                onChange={(e) => setSelectedSizes(prev => ({
+                  ...prev,
+                  [size.name]: e.target.checked
+                }))}
+                disabled={disabled}
+              />
+            </div>
           ))}
         </div>
       </Accordion>
@@ -144,8 +139,8 @@ export default function SizeSelector({ selectedSizes, setSelectedSizes, disabled
       <div style={{ marginBottom: '24px' }}>
         <select
           value={getCurrentPreset()}
-          onChange={(e) => {
-            if (e.target.value === 'all') {
+          onChange={(evt) => {
+            if (evt.target.value === 'all') {
               setSelectedSizes(prev => {
                 const newSizes = { ...prev };
                 [...webSizes.sizes, ...Object.values(socialPlatforms).flatMap(p => p.sizes)]
